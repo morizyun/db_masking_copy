@@ -1,0 +1,29 @@
+h1 Listing mask_settings
+
+table
+  thead
+    tr
+      th Database
+      th Table
+      th Column
+      th Mask type
+      th Fixed value
+      th
+      th
+      th
+
+  tbody
+    - @mask_settings.each do |mask_setting|
+      tr
+        td = mask_setting.database
+        td = mask_setting.table
+        td = mask_setting.column
+        td = mask_setting.mask_type
+        td = mask_setting.fixed_value
+        td = link_to 'Show', mask_setting
+        td = link_to 'Edit', edit_mask_setting_path(mask_setting)
+        td = link_to 'Destroy', mask_setting, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Mask setting', new_mask_setting_path

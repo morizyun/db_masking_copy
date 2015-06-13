@@ -1,0 +1,33 @@
+h1 database/dump
+
+h2 Table List
+
+- @tables.sort.each do |table|
+  h3= table
+  table.table.table-bordered.table-striped
+    - model = Database.get_model(params[:database], table)
+    - columns = model.column_names
+    tr
+      - columns.each do |col|
+        th= col
+    tr
+      - columns.each do |col|
+        - setting = MaskSetting.where(database: params[:database], table: table, column: col).first_or_initialize
+        = form_for setting do |f|
+          td
+            = f.hidden_field :database, value: params[:database]
+            = f.hidden_field :table, value: table
+            = f.hidden_field :column, value: col
+            p= f.select :mask_type, MaskSetting.mask_types, selected: setting.mask_type
+            p= f.text_field :fixed_value, value: setting.fixed_value, placeholder: 'fixed_value登録値'
+            p= f.submit
+    - model.all.each do |item|
+      tr
+        - columns.each do |col|
+          td
+            - value = item.__send__(col)
+            = Masker.secure_value(value)
+
+ul
+  li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:database], to: 'staging')
+  li= link_to 'テーブル内のデータを「staging」にコピーする', database_copy_data_path(from: params[:database], to: 'staging')

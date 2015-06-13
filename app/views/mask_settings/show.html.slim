@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Database:
+  = @mask_setting.database
+p
+  strong Table:
+  = @mask_setting.table
+p
+  strong Column:
+  = @mask_setting.column
+p
+  strong Mask type:
+  = @mask_setting.mask_type
+p
+  strong Fixed value:
+  = @mask_setting.fixed_value
+
+= link_to 'Edit', edit_mask_setting_path(@mask_setting)
+'|
+= link_to 'Back', mask_settings_path

@@ -82,9 +82,6 @@ gem 'kaminari'
 # NewRelic
 gem 'newrelic_rpm'
 
-# Airbrake
-gem 'airbrake'
-
 # HTML Parser
 gem 'nokogiri'
 
@@ -154,3 +151,7 @@ group :production, :staging do
   # ログ保存先変更、静的アセット Heroku 向けに調整
   gem 'rails_12factor'
 end
+
+# 偽装した値を生成
+gem 'gimei'
+gem 'faker'

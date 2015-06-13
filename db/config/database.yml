@@ -1,0 +1,15 @@
+staging:
+  adapter: postgresql
+  encoding: unicode
+  database: sample_staging
+  pool: 5
+  username: db_masking_copy
+  password:
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: sample_production
+  pool: 5
+  username: db_masking_copy
+  password:

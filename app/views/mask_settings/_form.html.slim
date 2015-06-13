@@ -1,0 +1,12 @@
+= simple_form_for(@mask_setting) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :database
+    = f.input :table
+    = f.input :column
+    = f.input :mask_type
+    = f.input :fixed_value
+
+  .form-actions
+    = f.button :submit

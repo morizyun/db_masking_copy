@@ -144,6 +144,8 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
+    migration_comments (0.3.2)
+      activerecord (>= 2.3.2)
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.7.0)
@@ -209,6 +211,7 @@ GEM
     rb-readline (0.5.3)
     rdoc (4.2.0)
     ref (1.0.5)
+    rfc822 (0.1.5)
     rspec-core (3.3.0)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.0)
@@ -328,6 +331,7 @@ DEPENDENCIES
   jquery-turbolinks
   kaminari
   less-rails
+  migration_comments
   newrelic_rpm
   nokogiri
   pg
@@ -339,6 +343,7 @@ DEPENDENCIES
   rails-flog
   rails_12factor
   rb-readline
+  rfc822
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

@@ -1,13 +1,13 @@
 h1 database/index
 
-- @database.settings.keys.each do |database|
+- @database.settings.keys.each do |db_key|
   p
     h2
-      span.env{style="padding-right: 10px;"}= "env: #{database}"
-      button.btn.btn-default= link_to '詳細を見る', database_show_path(database: database)
+      span.env{style="padding-right: 10px;"}= "env: #{db_key}"
+      button.btn.btn-default= link_to '詳細を見る', database_show_path(db_key: db_key)
     .settings
       table.table.table-bordered.table-striped
-        - @database.setting_in(database).each do |key, value|
+        - @database.setting_in(db_key).each do |key, value|
           tr
             th{width='200'}= key
             td= value

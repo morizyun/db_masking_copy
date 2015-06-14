@@ -8,7 +8,7 @@ class MaskSettingsController < ApplicationController
 
     respond_to do |format|
       if @mask_setting.save
-        format.html { redirect_to database_show_path(database: params[:mask_setting][:database]), notice: 'Mask setting was successfully created.' }
+        format.html { redirect_to database_show_path(db_key: params[:mask_setting][:db_key]), notice: 'Mask setting was successfully created.' }
         format.json { render :show, status: :created, location: @mask_setting }
       else
         format.html { render :new }
@@ -22,7 +22,7 @@ class MaskSettingsController < ApplicationController
   def update
     respond_to do |format|
       if @mask_setting.update(mask_setting_params)
-        format.html { redirect_to database_show_path(database: params[:mask_setting][:database]), notice: 'Mask setting was successfully updated.' }
+        format.html { redirect_to database_show_path(db_key: params[:mask_setting][:db_key]), notice: 'Mask setting was successfully updated.' }
         format.json { render :show, status: :ok, location: @mask_setting }
       else
         format.html { render :edit }
@@ -39,6 +39,6 @@ class MaskSettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def mask_setting_params
-      params.require(:mask_setting).permit(:database, :table, :column, :mask_type, :fixed_value)
+      params.require(:mask_setting).permit(:db_key, :table, :column, :mask_type, :fixed_value)
     end
 end

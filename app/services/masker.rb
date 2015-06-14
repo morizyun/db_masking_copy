@@ -7,11 +7,11 @@ class Masker
     to_model = Database.get_model(to, table)
 
     hash_list = []
+    settings = MaskSetting.where(db_key: from, table: table)
     from_model.all.each do |record|
       hash = {}
       record.class.column_names.each_with_index do |col, row_num|
-        setting = MaskSetting.where(database: from, table: table, column: col).first
-        hash[col.to_sym] = mask_value(setting, record, col, row_num)
+        hash[col.to_sym] = mask_value(settings, record, col, row_num)
       end
       hash_list << hash
     end
@@ -27,14 +27,19 @@ class Masker
   # Private Class Method
   # ------------------------------------------------------------------
 
-  def self.mask_value(setting, record, column, row_num = nil)
-    case setting.try(:mask_type)
+  def self.mask_value(settings, record, column, row_num = nil)
+    setting = settings.select { |s| s.column == column }.first
+    case setting.try(:mask_type) || MaskSetting::MASK_TYPE_DEFAULT
       when MaskSetting::MASK_TYPE_NULL
         nil
       when MaskSetting::MASK_TYPE_FIXED
-        setting[:fixed_value]
+        setting.fixed_value
       when MaskSetting::MASK_TYPE_FIXED_INCREMENT
-        setting[:fixed_value].gsub('@', "+#{(record[:id].presence || row_num.to_s)}@")
+        if setting.fixed_value.is_email?
+          setting.fixed_value.gsub('@', "+#{(record[:id].presence || row_num.to_s)}@")
+        else
+          setting.fixed_value + "#{(record[:id].presence || row_num.to_s)}"
+        end
       when MaskSetting::MASK_RANDOM_ADDRESS
         Gimei.address.kanji
       when MaskSetting::MASK_RANDOM_NAME

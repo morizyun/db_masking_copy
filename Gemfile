@@ -158,3 +158,8 @@ gem 'faker'
 
 # Bulk Insert/Update
 gem 'upsert'
+
+# Add comment to table/column
+gem 'migration_comments'
+
+gem 'rfc822'

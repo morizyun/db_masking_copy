@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :mask_settings, only: [:create, :update]
   root 'databases#index'
 
-  get 'databases/:database' => 'databases#show', as: 'database_show'
+  get 'databases/:db_key' => 'databases#show', as: 'database_show'
   get 'databases/copy_schema/:from/:to' => 'databases#copy_schema', as: 'database_copy_schema'
   get 'databases/copy_data/:from/:to' => 'databases#copy_data', as: 'database_copy_data'
 

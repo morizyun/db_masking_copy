@@ -5,17 +5,18 @@ h2 Table List
 - @tables.sort.each do |table|
   h3= table
   table.table.table-bordered.table-striped
-    - model = Database.get_model(params[:database], table)
+    - model = Database.get_model(params[:db_key], table)
     - columns = model.column_names
     tr
       - columns.each do |col|
         th= col
     tr
+      - settings = MaskSetting.where(db_key: params[:db_key], table: table)
       - columns.each do |col|
-        - setting = MaskSetting.where(database: params[:database], table: table, column: col).first_or_initialize
+        - setting = select_or_new_mask_setting(settings, params[:db_key], table, col)
         = form_for setting do |f|
           td
-            = f.hidden_field :database, value: params[:database]
+            = f.hidden_field :db_key, value: params[:db_key]
             = f.hidden_field :table, value: table
             = f.hidden_field :column, value: col
             p= f.select :mask_type, MaskSetting.mask_types, selected: setting.mask_type
@@ -28,5 +29,5 @@ h2 Table List
             = item.__send__(col)
 
 ul
-  li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:database], to: 'staging')
-  li= link_to 'テーブル内のデータを「staging」にコピーする', database_copy_data_path(from: params[:database], to: 'staging')
+  li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:db_key], to: 'staging')
+  li= link_to 'テーブル内のデータを「staging」にコピーする', database_copy_data_path(from: params[:db_key], to: 'staging')

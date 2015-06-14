@@ -11,36 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150613081010) do
+ActiveRecord::Schema.define(version: 20150613051328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "books", force: :cascade do |t|
-    t.string   "title"
-    t.string   "author"
-    t.integer  "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "mask_settings", force: :cascade do |t|
-    t.string   "database"
-    t.string   "table"
-    t.string   "column"
-    t.string   "mask_type"
-    t.text     "fixed_value"
+  create_table "mask_settings", force: :cascade, comment: "Manage settings for masking data" do |t|
+    t.string   "db_key",      null: false, comment: "key name in db/config/database.yml"
+    t.string   "table",       null: false, comment: "table name"
+    t.string   "column",      null: false, comment: "column name"
+    t.string   "mask_type",   null: false, comment: "type of masking"
+    t.text     "fixed_value",              comment: "fixed value to fill column value"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.string   "name"
-    t.string   "phone"
-    t.string   "email"
-    t.text     "address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  add_index "mask_settings", ["db_key", "table", "column"], name: "index_mask_settings_on_db_key_and_table_and_column", unique: true, using: :btree
 
 end

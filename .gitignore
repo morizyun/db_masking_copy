@@ -5,7 +5,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -173,4 +174,4 @@ crashlytics-build.properties
 # sftp configuration file
 sftp-config.json
 
-
+db/dump/*

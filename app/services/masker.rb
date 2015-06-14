@@ -18,7 +18,7 @@ class Masker
 
     to_model.transaction do
       to_model.connection.execute("delete from #{to_model.table_name}")
-      hash_list.each { |_| to_model.create(_) }
+      upsert_or_create(hash_list, to_model)
     end
   end
 
@@ -43,6 +43,27 @@ class Masker
         Faker::PhoneNumber.phone_number
       else
         record[column.to_sym]
+    end
+  end
+
+  # create / update hash_list to model
+  def self.upsert_or_create(hash_list, model)
+    if model.column_names.include?('id')
+      upsert(hash_list, model)
+    else
+      hash_list.each { |_| model.create(_) }
+    end
+  end
+
+  # Bulk insert / update (mass upsert)
+  def self.upsert(hash_list, model)
+    model.connection_pool.with_connection do |c|
+      Upsert.batch(c, model.table_name) do |upsert|
+        hash_list.each do |hash|
+          hash.merge!(updated_at: Time.now.iso8601, created_at: Time.now.iso8601)
+          upsert.row({id: hash[:id]}, hash)
+        end
+      end
     end
   end
 end

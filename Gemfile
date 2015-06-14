@@ -155,3 +155,6 @@ end
 # 偽装した値を生成
 gem 'gimei'
 gem 'faker'
+
+# Bulk Insert/Update
+gem 'upsert'

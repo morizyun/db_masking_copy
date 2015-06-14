@@ -25,8 +25,7 @@ h2 Table List
       tr
         - columns.each do |col|
           td
-            - value = item.__send__(col)
-            = Masker.secure_value(value)
+            = item.__send__(col)
 
 ul
   li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:database], to: 'staging')

@@ -12,24 +12,22 @@ class Database
   # ------------------------------------------------------------------
   # Public Class Method
   # ------------------------------------------------------------------
-  def self.define_class(environment, table_name)
+  def self.define_class(db_key, table_name)
     class_name = table_name.singularize.camelcase
     eval <<-EOF
-      module Sample
-        module #{environment.camelcase}
-          class #{class_name} < ActiveRecord::Base
-            path = Rails.root.join('db/config/database.yml')
-            config = YAML.load_file(path)
-            establish_connection(config['#{environment}'])
-          end
+      module #{db_key.camelcase}
+        class #{class_name} < ActiveRecord::Base
+          path = Rails.root.join('db/config/database.yml')
+          config = YAML.load_file(path)
+          establish_connection(config['#{db_key}'])
         end
       end
-      Sample::#{environment.camelcase}::#{class_name}
+      #{db_key.camelcase}::#{class_name}
     EOF
   end
 
-  def self.get_model(database, table_name)
-    Object.const_get "Database::Sample::#{database.singularize.camelcase}::#{table_name.singularize.camelcase}"
+  def self.get_model(db_key, table_name)
+    Object.const_get "Database::#{db_key.singularize.camelcase}::#{table_name.singularize.camelcase}"
   end
 
   # ------------------------------------------------------------------
@@ -39,8 +37,8 @@ class Database
     @settings = YAML.load_file(CONFIG_PATH)
   end
 
-  def setting_in(environment)
-    @settings[environment]
+  def setting_in(db_key)
+    @settings[db_key]
   end
 
   def restore_setting
@@ -49,11 +47,11 @@ class Database
     ActiveRecord::Base.establish_connection(settings[Rails.env])
   end
 
-  def generate_models(environment)
-    setting = setting_in(environment)
+  def generate_models(db_key)
+    setting = setting_in(db_key)
     ar = ActiveRecord::Base.establish_connection(setting)
     tables = ar.connection.tables.each do |table_name|
-      self.class.define_class(environment, table_name)
+      self.class.define_class(db_key, table_name)
     end
     restore_setting
     return tables
@@ -98,7 +96,6 @@ class Database
     db_name = setting['database']
 
     # コネクションの切断
-    binding.pry
     cmd = %(psql -c "SELECT pid, pg_terminate_backend(pid) as terminated FROM pg_stat_activity WHERE pid <> pg_backend_pid();" -d '#{db_name}')
 
     # コマンドを実行

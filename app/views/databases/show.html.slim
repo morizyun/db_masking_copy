@@ -3,7 +3,9 @@ h1 database/dump
 h2 Table List
 
 - @tables.sort.each do |table|
-  h3= table
+  h3
+    span{style="padding-right: 10px;"}= table
+    = link_to 'テーブルをコピー', table_copy_data_path(from: params[:db_key], to: 'staging', table: table), class: 'button btn btn-default'
   table.table.table-bordered.table-striped
     - model = Database.get_model(params[:db_key], table)
     - columns = model.column_names
@@ -29,5 +31,5 @@ h2 Table List
             = item.__send__(col)
 
 ul
-  li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:db_key], to: 'staging')
-  li= link_to 'テーブル内のデータを「staging」にコピーする', database_copy_data_path(from: params[:db_key], to: 'staging')
+  li= link_to 'スキーマー情報を「staging」にコピーする', database_copy_schema_path(from: params[:db_key], to: 'staging'), class: 'button btn btn-default'
+  li= link_to 'テーブル内のデータを「staging」にコピーする', database_copy_data_path(from: params[:db_key], to: 'staging'), class: 'button btn btn-default'

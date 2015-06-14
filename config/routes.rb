@@ -2,9 +2,15 @@ Rails.application.routes.draw do
   resources :mask_settings, only: [:create, :update]
   root 'databases#index'
 
-  get 'databases/:db_key' => 'databases#show', as: 'database_show'
-  get 'databases/copy_schema/:from/:to' => 'databases#copy_schema', as: 'database_copy_schema'
-  get 'databases/copy_data/:from/:to' => 'databases#copy_data', as: 'database_copy_data'
+  scope :databases do
+    get '/copy_schema/:from/:to'  => 'databases#copy_schema', as: 'database_copy_schema'
+    get '/copy_data/:from/:to'    => 'databases#copy_data',   as: 'database_copy_data'
+    get '/:db_key'                => 'databases#show',        as: 'database_show'
+  end
+
+  scope :tables do
+    get '/copy_data/:from/:to' => 'tables#copy_data', as: 'table_copy_data'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
